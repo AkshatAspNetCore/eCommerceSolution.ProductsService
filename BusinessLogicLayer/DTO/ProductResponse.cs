@@ -1,0 +1,9 @@
+﻿namespace BusinessLogicLayer.DTO;
+
+public record ProductResponse(Guid ProductID, string? ProductName,
+   string? Category, decimal? UnitPrice, int? Stock)
+{
+    public ProductResponse() : this(default, default, default, default, default)
+    {
+    }
+}
