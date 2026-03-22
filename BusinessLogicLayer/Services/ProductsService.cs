@@ -32,7 +32,7 @@ public class ProductsService : IProductService
             throw new ArgumentNullException(nameof(productAddRequest));
         }
 
-        //Validation is a responsibility of the business logic layer, so we will validate the productAddRequest using Fluent Validation before adding it to the database. If the validation fails, we will throw an exception with the validation errors. If the validation is successful, we will proceed to add the product to the database using the repository and return the added product as a ProductResponse object. Validate the product using Fluent validation
+        //Validation is a responsibility of the business logic layer, so we will validate the productAddRequest using Fluent Validation before adding it to the database. If the validation fails, we will throw an exception with the validation errors. If the validation is successful, we will proceed to add the product to the database using the repository and return the added product as a ProductResponse object.
         ValidationResult validationResult 
             = await _productAddRequestValidator.ValidateAsync(productAddRequest);
 
@@ -106,7 +106,7 @@ public class ProductsService : IProductService
             throw new ArgumentNullException("Invalid Product Id");
         }
 
-        //Validation is a responsibility of the business logic layer, so we will validate the productUpdateRequest using Fluent Validation before updating it in the database. If the validation fails, we will throw an exception with the validation errors. If the validation is successful, we will proceed to update the product in the database using the repository and return the updated product as a ProductResponse object. Validate the product using Fluent validation
+        //Validation is a responsibility of the business logic layer, so we will validate the productUpdateRequest using Fluent Validation before updating it in the database. If the validation fails, we will throw an exception with the validation errors. If the validation is successful, we will proceed to update the product in the database using the repository and return the updated product as a ProductResponse object.
         ValidationResult validationResult
             = await _productUpdateRequestValidator.ValidateAsync(productUpdateRequest);
 
