@@ -5,7 +5,6 @@ using DataAccessLayer.Entities;
 using DataAccessLayer.RepositoryContracts;
 using FluentValidation;
 using FluentValidation.Results;
-using System.Collections;
 using System.Linq.Expressions;
 
 namespace BusinessLogicLayer.Services;
