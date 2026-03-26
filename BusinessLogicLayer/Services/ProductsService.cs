@@ -44,13 +44,13 @@ public class ProductsService : IProductService
         }
 
         //If validation is successful, add the product to the database using the repository
-        //Map the ProductAddRequest object to a Product type using AutoMapper. It invokes ProductAddRequestToProductMappingProfile
+        //Map the ProductAddRequest object to a Product type using AutoMapper. It invokes ProductAddRequestToProductMappingProfile mapper
         Product productInput = _mapper.Map<Product>(productAddRequest); //ProductAddRequest(Source) -> Product(Destination)
         Product? addedProduct = await _productsRepository.AddProduct(productInput);
 
         if(addedProduct == null) return null;
 
-        //Map the AddedProduct object to a ProductResponse type using AutoMapper. It invokes ProductToProductResponseMappingProfile
+        //Map the AddedProduct object to a ProductResponse type using AutoMapper. It invokes ProductToProductResponseMappingProfile mapper
         ProductResponse addedProductResponse = _mapper.Map<ProductResponse>(addedProduct); //Added Product(Source) -> ProductResponse(Destination)
 
         return addedProductResponse;
@@ -76,7 +76,7 @@ public class ProductsService : IProductService
             return null;
         }
 
-        ProductResponse productFoundResponse = _mapper.Map<ProductResponse>(product); // Invoke ProductToProductResponseMappingProfile
+        ProductResponse productFoundResponse = _mapper.Map<ProductResponse>(product); // Invoke ProductToProductResponseMappingProfile mapper
         return productFoundResponse;
     }
 
@@ -84,7 +84,7 @@ public class ProductsService : IProductService
     {
         IEnumerable<Product?> products = await _productsRepository.GetProducts();
 
-        IEnumerable<ProductResponse?> productsFoundResponse = _mapper.Map<IEnumerable<ProductResponse>>(products); // Invoke ProductToProductResponseMappingProfile
+        IEnumerable<ProductResponse?> productsFoundResponse = _mapper.Map<IEnumerable<ProductResponse>>(products); // Invoke ProductToProductResponseMappingProfile mapper
         return [.. productsFoundResponse];
     }
 
@@ -92,7 +92,7 @@ public class ProductsService : IProductService
     {
         IEnumerable<Product?> products = await _productsRepository.GetProductsByCondition(conditionExpression);
 
-        IEnumerable<ProductResponse?> productsFoundResponse = _mapper.Map<IEnumerable<ProductResponse>>(products); // Invoke ProductToProductResponseMappingProfile
+        IEnumerable<ProductResponse?> productsFoundResponse = _mapper.Map<IEnumerable<ProductResponse>>(products); // Invoke ProductToProductResponseMappingProfile mapper
         return [.. productsFoundResponse];
     }
 
@@ -122,7 +122,7 @@ public class ProductsService : IProductService
 
         if (updatedProduct == null) return null;
 
-        //Map the UpdatedProduct object to a ProductResponse type using AutoMapper. It invokes ProductToProductResponseMappingProfile
+        //Map the UpdatedProduct object to a ProductResponse type using AutoMapper. It invokes ProductToProductResponseMappingProfile mapper
         ProductResponse updatedProductResponse = _mapper.Map<ProductResponse>(updatedProduct); // Updated Product(Source) -> ProductResponse(Destination)
 
         return updatedProductResponse;

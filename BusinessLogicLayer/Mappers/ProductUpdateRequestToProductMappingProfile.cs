@@ -8,6 +8,7 @@ public class ProductUpdateRequestToProductMappingProfile : Profile
 {
     public ProductUpdateRequestToProductMappingProfile()
     {
+        // Data is mapped from ProductUpdateRequest to Product. We map the ProductID property because it is required to identify which product to update. The other properties are mapped directly from the source to the destination.
         CreateMap<ProductUpdateRequest, Product>()
             .ForMember(dest => dest.ProductID, opt => opt.MapFrom(src => src.ProductID))
             .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.ProductName))

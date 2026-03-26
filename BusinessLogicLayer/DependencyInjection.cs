@@ -13,6 +13,7 @@ public static class DependencyInjection
     {
 
         // Add Business Logic Layer services into the IoC container
+
         services.AddAutoMapper(config =>
         {
             config.AddProfile<ProductAddRequestToProductMappingProfile>();
