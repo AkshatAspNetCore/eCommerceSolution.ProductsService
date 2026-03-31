@@ -22,6 +22,7 @@ public static class ProductAPIEndpoints
         {
             //This is a placeholder for the actual implementation of the GetProductByCondition endpoint.
             ProductResponse? product = await productsService.GetProductByCondition(temp => temp.ProductID == IdOfAProduct);
+            if(product == null) return Results.NotFound($"No product found with the ID: {IdOfAProduct}");   
             return Results.Ok(product);
         });
 
