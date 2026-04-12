@@ -28,7 +28,7 @@ public class ProductUpdateRequestValidator : AbstractValidator<ProductUpdateRequ
             .WithMessage("Unit price should be greater than 0 and less than 500.");
 
         //Quantity in stock
-        RuleFor(temp => temp.Stock)
+        RuleFor(temp => temp.QuantityInStock)
             .InclusiveBetween(0, int.MaxValue)
             .WithMessage($"Quantity in stock should be between 0 to {int.MaxValue}.");
     }
