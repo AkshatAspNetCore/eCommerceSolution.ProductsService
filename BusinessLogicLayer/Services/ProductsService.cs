@@ -67,6 +67,13 @@ public class ProductsService : IProductService
 
         //Attempt to delete the product from the database using the repository
         bool productDeleted = await _productsRepository.DeleteProduct(productID);
+
+        if (productDeleted) 
+        {
+            string routingKey = "product.delete";
+            var message = new ProductDeletionMessage(existingProduct.ProductID, existingProduct.ProductName);
+            await _rabbitMQPublisher.Publish<ProductDeletionMessage>(routingKey, message);
+        }
         return productDeleted;
     }
 

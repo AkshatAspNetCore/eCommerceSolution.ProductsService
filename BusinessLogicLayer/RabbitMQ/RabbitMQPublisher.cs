@@ -41,15 +41,18 @@ public class RabbitMQPublisher : IRabbitMQPublisher, IDisposable
     {
         if(_channel == null) await InitializeConnection();
 
-        string messageJson = JsonSerializer.Serialize(message);
-        byte[] messageBodyInBytes = Encoding.UTF8.GetBytes(messageJson);
+        if (_channel is not null)
+        {
+            string messageJson = JsonSerializer.Serialize(message);
+            byte[] messageBodyInBytes = Encoding.UTF8.GetBytes(messageJson);
 
-        // Create exchange if it doesn't exist
-        string exchangeName = _configuration["RABBITMQ_PRODUCTS_EXCHANGE"]!;
-        await _channel!.ExchangeDeclareAsync(exchange: exchangeName, type: ExchangeType.Direct, durable: true);
+            // Create exchange if it doesn't exist
+            string exchangeName = _configuration["RABBITMQ_PRODUCTS_EXCHANGE"]!;
+            await _channel.ExchangeDeclareAsync(exchange: exchangeName, type: ExchangeType.Direct, durable: true);
 
-        // Publish the message to the exchange with the specified routing key
-        await _channel!.BasicPublishAsync(exchange: exchangeName, routingKey: routingKey, body: messageBodyInBytes);
+            // Publish the message to the exchange with the specified routing key
+            await _channel.BasicPublishAsync(exchange: exchangeName, routingKey: routingKey, body: messageBodyInBytes);
+        }
     }
 
     public void Dispose()
