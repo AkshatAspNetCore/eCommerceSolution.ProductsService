@@ -48,7 +48,7 @@ public class RabbitMQPublisher : IRabbitMQPublisher, IDisposable
 
             // Create exchange if it doesn't exist
             string exchangeName = _configuration["RABBITMQ_PRODUCTS_EXCHANGE"]!;
-            await _channel.ExchangeDeclareAsync(exchange: exchangeName, type: ExchangeType.Direct, durable: true);
+            await _channel.ExchangeDeclareAsync(exchange: exchangeName, type: ExchangeType.Topic, durable: true);
 
             // Publish the message to the exchange with the specified routing key
             await _channel.BasicPublishAsync(exchange: exchangeName, routingKey: routingKey, body: messageBodyInBytes);

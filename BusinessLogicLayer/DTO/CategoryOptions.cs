@@ -7,6 +7,8 @@ public enum CategoryOptions
     SportsEquipment,
     BeautyProducts,
     Automotive,
+    Furniture,
+    Accessories,
     FoodAndBeverages,
     HealthAndPersonalCare
 }
