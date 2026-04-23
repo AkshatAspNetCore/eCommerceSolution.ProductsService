@@ -70,9 +70,14 @@ public class ProductsService : IProductService
 
         if (productDeleted) 
         {
-            string routingKey = "product.delete";
-            var message = new ProductDeletionMessage(existingProduct.ProductID, existingProduct.ProductName);
-            await _rabbitMQPublisher.Publish<ProductDeletionMessage>(routingKey, message);
+            //string routingKey = "product.delete";
+            //var message = new ProductDeletionMessage(existingProduct.ProductID, existingProduct.ProductName);
+            var headers = new Dictionary<string, object?>()
+            {
+                {"event","product.delete"},
+                {"RowCount", 1 }
+            };
+            await _rabbitMQPublisher.Publish<Product>(headers, existingProduct);
         }
         return productDeleted;
     }
@@ -129,18 +134,23 @@ public class ProductsService : IProductService
         //If validation is successful, update the product in the database using the repository
         Product productUpdateInput = _mapper.Map<Product>(productUpdateRequest); //ProductUpdateRequest(Source) -> Product(Destination)
 
-        //Check if the product name is changed or not
-        bool isProductNameChanged = productUpdateRequest.ProductName != existingProduct.ProductName;
         Product? updatedProduct = await _productsRepository.UpdateProduct(productUpdateInput);
 
-        if (isProductNameChanged) 
+        if (updatedProduct != null)
         {
             string routingKey = "product.update.name";
-            var message = new ProductNameUpdateMessage(updatedProduct!.ProductID, updatedProduct.ProductName);
-            await _rabbitMQPublisher.Publish<ProductNameUpdateMessage>(routingKey, message);
+            var headers = new Dictionary<string, object?>()
+            {
+                {"event","product.update"},
+                {"field", "name" },
+                {"RowCount",1}
+            };
+            await _rabbitMQPublisher.Publish<Product>(headers, updatedProduct);
         }
-
-        if (updatedProduct == null) return null;
+        else 
+        {
+            return null;
+        }
 
         //Map the UpdatedProduct object to a ProductResponse type using AutoMapper. It invokes ProductToProductResponseMappingProfile mapper
         ProductResponse updatedProductResponse = _mapper.Map<ProductResponse>(updatedProduct); // Updated Product(Source) -> ProductResponse(Destination)

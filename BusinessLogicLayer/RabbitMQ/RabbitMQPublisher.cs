@@ -37,7 +37,7 @@ public class RabbitMQPublisher : IRabbitMQPublisher, IDisposable
         _channel = await _connection.CreateChannelAsync();
     }
 
-    public async Task Publish<T>(string routingKey, T message)
+    public async Task Publish<T>(Dictionary<string, object?> headers, T message)
     {
         if(_channel == null) await InitializeConnection();
 
@@ -48,10 +48,14 @@ public class RabbitMQPublisher : IRabbitMQPublisher, IDisposable
 
             // Create exchange if it doesn't exist
             string exchangeName = _configuration["RABBITMQ_PRODUCTS_EXCHANGE"]!;
-            await _channel.ExchangeDeclareAsync(exchange: exchangeName, type: ExchangeType.Topic, durable: true);
+            await _channel.ExchangeDeclareAsync(exchange: exchangeName, type: ExchangeType.Headers, durable: true);
 
-            // Publish the message to the exchange with the specified routing key
-            await _channel.BasicPublishAsync(exchange: exchangeName, routingKey: routingKey, body: messageBodyInBytes);
+            // Publish the message to the exchange with the specified headers
+            var basicProperties = new BasicProperties
+            {
+                Headers = headers
+            };
+            await _channel.BasicPublishAsync(exchange: exchangeName, routingKey: string.Empty, mandatory: false, basicProperties: basicProperties, body: messageBodyInBytes);
         }
     }
 
