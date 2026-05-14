@@ -14,6 +14,7 @@ public static class ProductAPIEndpoints
         {
             //This is a placeholder for the actual implementation of the GetProducts endpoint.
             List<ProductResponse?> products = await productsService.GetProducts();
+            //Modified code...
             return Results.Ok(products);
         });
 
