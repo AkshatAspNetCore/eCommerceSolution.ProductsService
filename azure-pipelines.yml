@@ -4,16 +4,39 @@
 # https://aka.ms/yaml
 
 trigger:
-- master
+- dev
 
-pool:
-  vmImage: ubuntu-latest
+resources:
+- repo: self
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+variables:
+ - name: dockerRegistryServiceConnection
+   value: '805e423a-a0e7-41c8-a8e7-a1828d65300d'
+ - name: imageRepository
+   value: 'products-microservice' 
+ - name: containerRegistry
+   value: 'akshatecommerceregistry.azurecr.io' 
+ - name: dockerFilePath
+   value: '$(Build.SourcesDirectory)/ProductsMicroservice.API/Dockerfile' 
+ - name: tag
+   value: '$(Build.BuildId)'
+ - name: vmImageName
+   value: 'ubuntu-latest' 
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+stages:
+ - stage: Build
+   displayName: Build and push stage
+   jobs:
+   - job: Build
+     displayName: Docker Build
+     pool:
+      vmImage: $(vmImageName)
+     steps:
+     - task: Docker@2
+       displayName: Build and push an image to ecommerce registry
+       inputs:
+        command: buildAndPush
+        repository: $(imageRepository)
+        dockerfile: $(dockerFilePath)
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: $(tag)
