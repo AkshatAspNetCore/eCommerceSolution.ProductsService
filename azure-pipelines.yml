@@ -41,3 +41,6 @@ stages:
         buildContext: $(Build.SourcesDirectory)     
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: $(tag)
+
+ - stage: Test
+   displayName: Test and publish results stage
