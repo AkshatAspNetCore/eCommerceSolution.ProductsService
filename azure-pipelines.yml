@@ -94,20 +94,19 @@ stages:
 
  - stage: DeployToDev
    displayName: Deploy to Dev
-   dependsOn: Test
-   condition: and(succeeded('Build'), eq(variables['Build.SourceBranch'],'refs/heads/dev'))
+   dependsOn: Build
+   condition: and(succeeded(), eq(variables['Build.SourceBranch'],'refs/heads/dev'))
    jobs:
-   - deployment: DeploymentToDev
+   - job: DeploymentToDev
      displayName: Deployment to Dev Environment
-     environment: dev
-     strategy: 
-      runOnce:
-       deploy:
-        steps:
-        - checkout: self
-          displayName: Checkout source code
-
-        - script: |
-           echo "Listing contents of k8s"
-           ls -l $(Build.SourcesDirectory)/k8s/
-          displayName: List files in k8s directory
+     pool:
+      vmImage: $(vmImageName)
+     steps:
+     - task: KubernetesManifest@1
+       displayName: Deploy to AKS dev namespace
+       inputs:
+        action: deploy
+        kubernetesServiceConnection: $(aksServiceConnectionName)
+        namespace: $(kubernetesNamespace)
+        manifests: $(deploymentFile)
+        containers: '$(containerRegistry)/$(imageRepository):$(tag)'
