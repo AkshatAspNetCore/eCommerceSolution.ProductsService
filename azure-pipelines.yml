@@ -4,7 +4,13 @@
 # https://aka.ms/yaml
 
 trigger:
-- dev
+ branches:
+  include:
+  - dev
+  - qa
+  - uat
+  - staging
+  - prod
 
 resources:
 - repo: self
@@ -29,9 +35,17 @@ variables:
  - name: aksServiceConnectionName
    value: 'aks-deploy-connection'
  - name: deploymentFile
-   value: '$(Build.SourcesDirectory)/k8s/deployment.yml' 
- - name: kubernetesNamespace
+   value: '$(Build.SourcesDirectory)/k8s/products-microservice-deployment.yml' 
+ - name: kubernetesNamespaceDev
    value: 'ecommerce-dev' 
+ - name: kubernetesNamespaceQA
+   value: 'ecommerce-qa' 
+ - name: kubernetesNamespaceUAT
+   value: 'ecommerce-uat' 
+ - name: kubernetesNamespaceStaging
+   value: 'ecommerce-staging' 
+ - name: kubernetesNamespaceProd
+   value: 'ecommerce-prod' 
 
 stages:
  - stage: Build
@@ -93,24 +107,56 @@ stages:
          codeCoverageEnabled: true
 
  - stage: DeployToDev
-   displayName: Deploy to Dev
+   displayName: Deploy to Dev 
    dependsOn: Test
    condition: and(succeeded(), eq(variables['Build.SourceBranch'],'refs/heads/dev'))
+   variables: 
+    namespace: $(kubernetesNamespaceDev)
    jobs:
-   - job: DeploymentToDev
-     displayName: Deployment to Dev Environment
-     pool:
-      vmImage: $(vmImageName)
-     steps:
-     - checkout: self
-     - script: |
-        sed -i "s/__TAG__/$(tag)/g" $(deploymentFile)
-       displayName: Display image tag in deployment file
-     - task: KubernetesManifest@1
-       displayName: Deploy to AKS dev namespace
-       inputs:
-        action: deploy
-        kubernetesServiceConnection: $(aksServiceConnectionName)
-        namespace: $(kubernetesNamespace)
-        manifests: |
-         $(Build.SourcesDirectory)/k8s/**/*.yml
+   - template: deploy-job-template.yml
+     parameters:
+      namespace: $(namespace)
+
+ - stage: DeployToQA
+   displayName: Deploy to QA
+   dependsOn: Test
+   condition: and(succeeded(), eq(variables['Build.SourceBranch'],'refs/heads/qa'))
+   variables: 
+    namespace: $(kubernetesNamespaceQA)
+   jobs:
+   - template: deploy-job-template.yml
+     parameters:
+      namespace: $(namespace)
+
+ - stage: DeployToUAT
+   displayName: Deploy to UAT
+   dependsOn: Test
+   condition: and(succeeded(), eq(variables['Build.SourceBranch'],'refs/heads/uat'))
+   variables: 
+    namespace: $(kubernetesNamespaceUAT)
+   jobs:
+   - template: deploy-job-template.yml
+     parameters:
+      namespace: $(namespace)
+
+ - stage: DeployToStaging
+   displayName: Deploy to Staging
+   dependsOn: Test
+   condition: and(succeeded(), eq(variables['Build.SourceBranch'],'refs/heads/staging'))
+   variables: 
+    namespace: $(kubernetesNamespaceStaging)
+   jobs:
+   - template: deploy-job-template.yml
+     parameters:
+      namespace: $(namespace)
+
+ - stage: DeployToProd
+   displayName: Deploy to Prod
+   dependsOn: Test
+   condition: and(succeeded(), eq(variables['Build.SourceBranch'],'refs/heads/prod'))
+   variables: 
+    namespace: $(kubernetesNamespaceProd)
+   jobs:
+   - template: deploy-job-template.yml
+     parameters:
+      namespace: $(namespace)
