@@ -18,7 +18,6 @@ public static class ProductAPIEndpoints
             return Results.Ok(products);
         });
         
-
         //GET /api/products/search/product-id/00000-00000-00000-00000
         app.MapGet("/api/products/search/product-id/{IdOfAProduct:guid}", async (IProductService productsService, Guid IdOfAProduct) =>
         {
@@ -27,7 +26,6 @@ public static class ProductAPIEndpoints
             if(product == null) return Results.NotFound($"No product found with the ID: {IdOfAProduct}");   
             return Results.Ok(product);
         });
-
 
         //GET /api/products/search/abc... (search string)
         app.MapGet("/api/products/search/{SearchString}", async (IProductService productsService, string SearchString) =>
@@ -39,7 +37,6 @@ public static class ProductAPIEndpoints
             var products = productsByProductName.Union(productsByCategory);
             return Results.Ok(products);
         });
-
 
         //POST /api/products
         app.MapPost("/api/products", async (IProductService productsService, IValidator<ProductAddRequest> productAddValidatorRequest, ProductAddRequest productAddRequest) =>
@@ -62,7 +59,6 @@ public static class ProductAPIEndpoints
             return Results.Created($"/api/products/search/product-id/{addedProduct.ProductID}",addedProduct);
         });
 
-
         //PUT /api/products
         app.MapPut("/api/products", async (IProductService productsService, IValidator<ProductUpdateRequest> productUpdateValidatorRequest, ProductUpdateRequest productUpdateRequest) =>
         {
@@ -83,7 +79,6 @@ public static class ProductAPIEndpoints
 
             return Results.Ok(updatedProduct);
         });
-
 
         //DELETE /api/products/00000-00000-00000-00000
         app.MapDelete("/api/products/{IdOfAProduct:guid}", async (IProductService productsService, Guid IdOfAProduct) =>
