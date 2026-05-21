@@ -36,16 +36,6 @@ variables:
    value: 'aks-deploy-connection'
  - name: deploymentFile
    value: '$(Build.SourcesDirectory)/k8s/products-microservice-deployment.yml' 
- - name: kubernetesNamespaceDev
-   value: 'ecommerce-dev' 
- - name: kubernetesNamespaceQA
-   value: 'ecommerce-qa' 
- - name: kubernetesNamespaceUAT
-   value: 'ecommerce-uat' 
- - name: kubernetesNamespaceStaging
-   value: 'ecommerce-staging' 
- - name: kubernetesNamespaceProd
-   value: 'ecommerce-prod' 
 
 stages:
  - stage: Build
@@ -111,7 +101,7 @@ stages:
    dependsOn: Test
    condition: and(succeeded(), eq(variables['Build.SourceBranch'],'refs/heads/dev'))
    variables: 
-    namespace: $(kubernetesNamespaceDev)
+   - group: products-microservice-dev
    jobs:
    - template: deploy-job-template.yml
      parameters:
@@ -122,7 +112,7 @@ stages:
    dependsOn: Test
    condition: and(succeeded(), eq(variables['Build.SourceBranch'],'refs/heads/qa'))
    variables: 
-    namespace: $(kubernetesNamespaceQA)
+   - group: products-microservice-qa
    jobs:
    - template: deploy-job-template.yml
      parameters:
@@ -133,7 +123,7 @@ stages:
    dependsOn: Test
    condition: and(succeeded(), eq(variables['Build.SourceBranch'],'refs/heads/uat'))
    variables: 
-    namespace: $(kubernetesNamespaceUAT)
+   - group: products-microservice-uat
    jobs:
    - template: deploy-job-template.yml
      parameters:
@@ -144,7 +134,7 @@ stages:
    dependsOn: Test
    condition: and(succeeded(), eq(variables['Build.SourceBranch'],'refs/heads/staging'))
    variables: 
-    namespace: $(kubernetesNamespaceStaging)
+   - group: products-microservice-staging
    jobs:
    - template: deploy-job-template.yml
      parameters:
@@ -155,7 +145,7 @@ stages:
    dependsOn: Test
    condition: and(succeeded(), eq(variables['Build.SourceBranch'],'refs/heads/prod'))
    variables: 
-    namespace: $(kubernetesNamespaceProd)
+   - group: products-microservice-prod
    jobs:
    - template: deploy-job-template.yml
      parameters:
