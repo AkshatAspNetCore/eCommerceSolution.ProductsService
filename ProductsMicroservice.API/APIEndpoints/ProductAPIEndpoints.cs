@@ -14,9 +14,10 @@ public static class ProductAPIEndpoints
         {
             //This is a placeholder for the actual implementation of the GetProducts endpoint.
             List<ProductResponse?> products = await productsService.GetProducts();
+            //Modified code...
             return Results.Ok(products);
         });
-
+        
         //GET /api/products/search/product-id/00000-00000-00000-00000
         app.MapGet("/api/products/search/product-id/{IdOfAProduct:guid}", async (IProductService productsService, Guid IdOfAProduct) =>
         {
