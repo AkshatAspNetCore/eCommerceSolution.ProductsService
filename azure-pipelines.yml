@@ -35,9 +35,29 @@ variables:
  - name: aksServiceConnectionName
    value: 'aks-deploy-connection'
  - name: deploymentFile
-   value: '$(Build.SourcesDirectory)/k8s/products-microservice-deployment.yml' 
+   value: '$(Build.SourcesDirectory)/k8s/products-microservice-deployment.yml'
+ - name: resourceGroupServiceConnectionName
+   value: 'ecommerce-resource-group-connection'
+ - name: keyVaultName
+   value: 'akshat-products-kv'
 
 stages:
+ - stage: InitializeKeyVault
+   displayName: Initialize Key vault secrets
+   jobs:
+   - job: FetchSecrets
+     displayName: Fetch key vault secrets
+     pool: 
+      vmImage: $(vmImageName)
+     steps:
+     - task: AzureKeyVault@2
+       displayName: Fetch all key vault secrets 
+       inputs:
+        azureSubscription: $(resourceGroupServiceConnectionName)
+        KeyVaultName: $(keyVaultName) 
+        SecretsFilter: '*'
+        RunAsPreJob: true
+
  - stage: Build
    displayName: Build and push stage
    jobs:
@@ -100,23 +120,19 @@ stages:
    displayName: Deploy to Dev 
    dependsOn: Test
    condition: and(succeeded(), eq(variables['Build.SourceBranch'],'refs/heads/dev'))
-   variables: 
-   - group: products-microservice-dev
    jobs:
    - template: deploy-job-template.yml
      parameters:
-      namespace: $(namespace)
+      namespace: products-microservice-dev
 
  - stage: DeployToQA
    displayName: Deploy to QA
    dependsOn: Test
    condition: and(succeeded(), eq(variables['Build.SourceBranch'],'refs/heads/qa'))
-   variables: 
-   - group: products-microservice-qa
    jobs:
    - template: deploy-job-template.yml
      parameters:
-      namespace: $(namespace)
+      namespace: products-microservice-qa
 
  - stage: DeployToUAT
    displayName: Deploy to UAT
