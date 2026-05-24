@@ -123,7 +123,7 @@ stages:
    jobs:
    - template: deploy-job-template.yml
      parameters:
-      namespace: products-microservice-dev
+      namespace: ecommerce-dev
 
  - stage: DeployToQA
    displayName: Deploy to QA
@@ -132,7 +132,7 @@ stages:
    jobs:
    - template: deploy-job-template.yml
      parameters:
-      namespace: products-microservice-qa
+      namespace: ecommerce-qa
 
  - stage: DeployToUAT
    displayName: Deploy to UAT
