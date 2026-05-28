@@ -6,7 +6,7 @@ Part of a **3-service microservices architecture** built with **ASP.NET Core**, 
 
 This Products Microservice is one of three services in a distributed eCommerce system:
 
-![eCommerce microservices architecture](products_microservice_architechture.svg)
+![eCommerce microservices architecture](products_microservice_architechture.png)
 
 | Service | Responsibility | Database |
 |---------|----------------|----------|
