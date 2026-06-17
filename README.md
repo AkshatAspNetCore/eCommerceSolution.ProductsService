@@ -30,7 +30,7 @@ Other services consume this microservice via **HTTP clients** with **Polly-based
 - MySQL — relational database
 - Integrated with Ocelot API Gateway (from OrdersService repo)
 
-**Frontend** *(in development)*
+**Frontend** 
 - Angular — UI for orders, products, users
 
 ## 📐 Project Structure (Clean Architecture)
@@ -38,12 +38,6 @@ Other services consume this microservice via **HTTP clients** with **Polly-based
 ├── DataAccessLayer/                 # Repositories, Entities, DbContext  
 ├── ECommerceSolution.ProductsService/  # API layer, Controllers, Program.cs, Dockerfile  
 └── ECommerceSolution.ProductsService.sln  
-
-## 🚀 Getting Started
-
-Detailed setup instructions and prerequisites will follow soon. 🛠️
-
-Project is actively under development — stay tuned.
 
 ## ✨ Key Features
 
@@ -55,14 +49,6 @@ Project is actively under development — stay tuned.
 - ✅ **FluentValidation** for request validation
 - ✅ **Containerized** with Docker for consistent deployment
 
-## 🔮 Roadmap
-
-- [ ] Search and filtering endpoints
-- [ ] Pagination support
-- [ ] Unit tests (xUnit + Moq)
-- [ ] RabbitMQ integration for product events
-- [ ] Angular frontend (in development)
-- [ ] Azure deployment
 
 ## Learning Project
 
