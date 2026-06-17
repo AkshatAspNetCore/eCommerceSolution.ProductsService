@@ -10,7 +10,7 @@ This Products Microservice is one of three services in a distributed eCommerce s
 
 | Service | Responsibility | Database |
 |---------|----------------|----------|
-| UsersService | User management *(JWT & registration coming soon)* | PostgreSQL |
+| UsersService | User management *(JWT & registration)* | Entra ID |
 | **ProductsService** *(this repo)* | Product catalog and inventory | MySQL |
 | OrdersService | Order processing and validation | MongoDB |
 
