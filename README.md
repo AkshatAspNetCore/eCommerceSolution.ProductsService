@@ -9,7 +9,8 @@ Part of a **3-service microservices architecture** built with **ASP.NET Core**, 
 
 **What this means in practice:**
 - **Data does not persist.** Products, users, and orders you create live only inside the pod's container filesystem.
-- **State resets** whenever the cluster is turned off, or when pods are recreated (which happens on every restart — effectively a daily reset). Each pod comes back **fresh and empty**.
+- **State resets** whenever the cluster is turned off, or when pods are recreated (which happens on every restart — effectively a daily reset).
+- Each pod comes back **fresh and empty**.
 - If you revisit the app the next day, expect a **clean slate** — this is intentional, not a bug.
 
 In a production setup, durability would come from **managed databases** (e.g., Azure Database for MySQL, Azure Cosmos DB) or **PersistentVolumes / StatefulSets** backed by Azure Disks, so data would survive restarts. That's deliberately left out here to keep the project free to host while still demonstrating the full CI/CD → AKS pipeline.
