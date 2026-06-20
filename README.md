@@ -19,7 +19,7 @@ In a production setup, durability would come from **managed databases** (e.g., A
 
 This Products Microservice is one of three services in a distributed eCommerce system:
 
-![eCommerce microservices architecture](products_microservice_architecture_v3.png)
+![eCommerce microservices architecture](products_microservice_architecture_v4.png)
 
 | Service | Responsibility | Database |
 |---------|----------------|----------|
